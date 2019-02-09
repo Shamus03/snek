@@ -1,5 +1,7 @@
 # Snek
 
+![](img/img1.png)
+
 ## Installation
 
 ```
@@ -16,4 +18,5 @@ $ snek
 | L           | Toggle looping                  |
 | + and -     | Increase/decrease game speed    |
 | \* and /    | Add/remove fruits from the game |
+| Ctrl-R      | Reset the game                  |
 | Q or Ctrl-C | Quit                            |
