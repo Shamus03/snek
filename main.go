@@ -56,7 +56,7 @@ func (g *snakeGame) tick() {
 	// Move the player.
 	g.player.body = append([]vector{
 		g.player.body[0].Add(g.player.direction),
-	}, g.player.body[0:len(g.player.body)-1]...)
+	}, g.player.body[:len(g.player.body)-1]...)
 
 	// Loop the player around or check for collision with the walls.
 	if g.loop {
@@ -110,6 +110,9 @@ func (g snakeGame) randomPos() vector {
 				choices = append(choices, p)
 			}
 		}
+	}
+	if len(choices) == 0 {
+		return vector{}
 	}
 	return choices[rand.Int()%len(choices)]
 }
@@ -215,7 +218,7 @@ loop:
 			case termbox.EventKey:
 				switch {
 				// Game controls
-				case ev.Key == termbox.KeyCtrlC:
+				case ev.Key == termbox.KeyCtrlC || ev.Ch == 'q':
 					break loop
 				case ev.Key == termbox.KeyCtrlR:
 					game.reset(game.width, game.height)
@@ -232,6 +235,15 @@ loop:
 					speed = speed * 4 / 3
 					ticker = time.NewTicker(speed)
 					game.showMessage("Speed decreased...")
+				case ev.Ch == '*':
+					game.fruits = append(game.fruits, game.randomPos())
+					game.showMessage("Extra fruit added!")
+				case ev.Ch == '/':
+					if len(game.fruits) > 0 {
+						i := rand.Int() % len(game.fruits)
+						game.fruits = append(game.fruits[:i], game.fruits[i+1:]...)
+						game.showMessage("Removed a fruit.")
+					}
 				// Movement
 				case ev.Key == termbox.KeyArrowUp:
 					game.player.changeDirection(directionUp)
